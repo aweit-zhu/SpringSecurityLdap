@@ -1,0 +1,22 @@
+services:
+  openldap:
+    image: osixia/openldap
+    environment:
+      - LDAP_ORGANISATION=Example Inc.
+      - LDAP_DOMAIN=example.com
+      - LDAP_ADMIN_PASSWORD=admin
+    ports:
+      - 389:389
+    volumes:
+      - ./data/ldap:/var/lib/ldap
+      - ./data/slapd:/etc/ldap/slapd.d
+
+  phpldapadmin:
+    image: osixia/phpldapadmin
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=openldap
+      - PHPLDAPADMIN_HTTPS=false
+    ports:
+      - 8080:80
+    depends_on:
+      - openldap
